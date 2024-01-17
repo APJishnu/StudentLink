@@ -1,0 +1,42 @@
+/* Additional styles for your specific template */
+
+.card {
+    position: relative;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #dee2e6;
+    transition: box-shadow 0.3s ease-in-out;
+  }
+  
+  .card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+  
+  .card-body {
+    padding: 1.25rem;
+  }
+  
+  .card-footer {
+    display: none;
+    background-color: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+    padding: 0.75rem;
+  }
+  
+  .card:hover .card-footer {
+    display: block;
+  }
+  
+  .options {
+    text-align: center;
+  }
+  
+  .btn {
+    margin-right: 5px;
+  }
+  
+  .small {
+    font-size: 12px;
+    color: #6c757d;
+  }
+  

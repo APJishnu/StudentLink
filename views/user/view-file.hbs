@@ -1,0 +1,50 @@
+<!-- user/view-file.hbs -->
+
+<section class="mt-4">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 text-center">
+        <h3>Files for Subject: {{selectedSubject}}</h3>
+      </div>
+      <div class="col-md-6 text-right">
+        <a href="/courses" class="btn btn-secondary mt-2">Back</a>
+      </div>
+    </div>
+    <div class="row mt-4">
+     {{#if data}}
+      {{#each data}}
+      <div class="col-md-3 mb-4">
+        <div class="card">
+          <div class="card-body">
+            <div class="content">
+              <h5 class="card-title">{{this.content}}</h5>
+              <p class="card-text">{{this.moduleName}}</p>
+            </div>
+          </div>
+          <div class="card-footer">
+            <div class="options">
+              {{#if file}}
+              <button onclick="openPDF('./pdf/{{this.file}}')" class="btn btn-primary btn-sm">Open PDF</button>
+              <a class="btn btn-primary btn-sm" href="./pdf/{{this.file }}" download>Download</a>
+              {{else}}
+              <p class="small">No file available for viewing.</p>
+              {{/if}}
+            </div>
+          </div>
+        </div>
+      </div>
+      {{/each}}
+      {{else}}
+        <h6 class="text-center">No file available for viewing......</h6>
+        {{/if}}
+
+    </div>
+  </div>
+</section>
+
+<!-- Script for opening PDFs -->
+<script>
+  function openPDF(pdfUrl) {
+    window.open(pdfUrl, '_blank');
+  }
+</script>

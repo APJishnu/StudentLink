@@ -1,0 +1,161 @@
+.card-body{
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 10px;
+}
+
+
+.form-container select {
+    height: 50px;
+    border-radius: 8px;
+    border: 1px solid #c0c0c0;
+    outline: 0 !important;
+    box-sizing: border-box;
+    padding: 10px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 1px 5px;
+  }
+  
+  /* Style the submit button */
+  .form-container .submit {
+    border: none;
+    outline: none;
+    background-color: royalblue;
+    padding: 15px;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .form-container .submit:hover {
+    background-color: rgb(56, 90, 194);
+  }
+  
+  /* Style the form labels */
+  .form-container label {
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #333;
+  }
+  
+  /* Style the form title */
+  .form-container .title {
+    font-size: 25px;
+    color: royalblue;
+  }
+  
+  /* Style the form group */
+  .form-container .form-group {
+    margin-bottom: 20px;
+  }
+  
+  /* Style the form container */
+  .form-container .card {
+    background-color: #fff;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    border-radius: 10px;
+  }
+  
+  /* Style the text-center class */
+  .form-container .text-center {
+    text-align: center;
+  }
+  
+  /* Style the form buttons */
+  .form-container button {
+    cursor: pointer;
+  }
+  
+  /* Style the error message */
+  .form-container #error-message {
+    font-size: 15px;
+    margin-top: -10px;
+    color: #FF0000; /* Adjust the color as needed */
+  }
+
+
+
+
+
+
+
+  /* Add these styles to your existing stylesheet */
+
+/* Style the container */
+.container {
+    margin-top: 20px;
+  }
+  
+  /* Style the heading */
+  h3 {
+    background-color: #99daff;
+    padding: 10px;
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  /* Style the back button */
+  .btn-secondary {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    text-decoration: none;
+  }
+  
+  /* Style the cards */
+  .card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Style the card title */
+  .card-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  /* Style the card text */
+  .card-text {
+    font-size: 16px;
+    margin-bottom: 15px;
+  }
+  
+  /* Style the card buttons */
+  .card-footer .btn {
+    margin-right: 5px;
+  }
+  
+  /* Style the small text */
+  .small {
+    font-size: 14px;
+    color: #777;
+  }
+  
+  /* Style the download button */
+  .btn-primary {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  .btn-primary:hover {
+    background-color: #0056b3;
+  }
+  
+
+
+
+
+

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+  <title>Engineering Cards</title>
+ 
+</head>
+
+<body>
+<div class="text-center mt-5">
+        <h1>ADMIN HOME</h1>
+      </div>
+
+  <div class="cards-container mt-5">
+    
+    <div class="card">
+      <div>
+        <h2>Computer Engineering</h2>
+      </div>
+      <div>
+        <p>Unlock the potential of computer systems and software development. Dive into coding, algorithms, and system architecture.</p>
+      </div>
+      <div>
+        <button class="open-button" onclick="loadSubjects('computer')">Open</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div>
+        <h2>Electronics Engineering</h2>
+      </div>
+      <div>
+        <p>Embark on a journey into the world of electronic circuits and systems. Understand the principles behind devices that power our modern world.</p>
+      </div>
+      <div>
+        <button class="open-button" onclick="loadSubjects('electronics')">Open</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div>
+        <h2>Mechanical Engineering</h2>
+      </div>
+      <div>
+        <p>Discover the world of mechanical systems. From machinery design to thermal sciences, explore the core principles of mechanical engineering.</p>
+      </div>
+      <div>
+        <button class="open-button" onclick="loadSubjects('mechanical')">Open</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div>
+        <h2>Printing Technology</h2>
+      </div>
+      <div>
+        <p>Immerse yourself in the art and science of printing and graphic communication. Explore the intersection of technology and creativity.</p>
+      </div>
+      <div>
+        <button class="open-button" onclick="loadSubjects('printing')">Open</button>
+      </div>
+    </div>
+  </div>
+
+
+
+  <script>
+  function loadSubjects(department) {
+    // Redirect to the /admin route with the department parameter
+    window.location.href = `/admin/admin-viewfiles?department=${department}`;
+  }
+</script>
+
+</body>
+
+</html>
