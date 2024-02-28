@@ -86,6 +86,19 @@ const AdminLoginSchema = new mongoose.Schema({
       default: 'admin123' // Default password value
     }
   });
+
+
+  const verificationSchema = new mongoose.Schema({
+    email: {
+      type: String,
+      required: true,
+    },
+    verificationCode: {
+      type: String,
+      required: true,
+    }
+  });
+  
   
 
 
@@ -96,6 +109,7 @@ const AdminLoginSchema = new mongoose.Schema({
 const collection=new mongoose.model('collection1',LoginSchema)
 const AdminCollection=new mongoose.model('AdminData',AdminSchema)
 const AdminLogin=new mongoose.model('AdminLogin',AdminLoginSchema)
+const verification=new mongoose.model('verification',verificationSchema)
 
 
 // const newAdminLogin = new AdminLogin({
@@ -113,4 +127,4 @@ const AdminLogin=new mongoose.model('AdminLogin',AdminLoginSchema)
 //     });
 
 
-module.exports = { mongoose, db ,collection ,AdminCollection,AdminLogin};
+module.exports = { mongoose, db ,collection ,AdminCollection,AdminLogin,verification};

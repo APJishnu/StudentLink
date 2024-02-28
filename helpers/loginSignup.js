@@ -1,5 +1,6 @@
 const { collection } = require('../config/connection');
 const { AdminLogin } = require('../config/connection');
+const { verification } = require('../config/connection');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const ObjectId=mongoose.Types.ObjectId;
@@ -121,8 +122,74 @@ module.exports = {
         callback(error);
       }
 },
+
   
-    
-    
+verificationEmail :  (email,verificationCode)=>{
+
+  return new Promise(async(resolve,reject)=>{
+
+  
+    let verificationData = new verification({
+      email: email,
+      verificationCode:verificationCode,
+  });
+
+    await verificationData.save();
+
+    resolve(verificationData)
+
+  })
+  
+},
+
+getVerificationDataById:   (verificationId) => {
+
+  return new Promise(async(resolve,reject)=>{
+    let verificationData = await verification.findById(verificationId);
+
+    resolve(verificationData);
+  })
+   
+},
+deleteVerificationDataById:   (verificationId) => {
+
+  return new Promise(async(resolve,reject)=>{
+    let verificationData = await verification.findByIdAndDelete(verificationId);
+
+    resolve(verificationData);
+  })
+   
+},
+
+resetPassword: async (datas, callback) => {
+  try {
+    if (datas.newPassword !== datas.confirmPassword) {
+      // Passwords don't match
+      callback('Passwords do not match', null);
+      return;
+    }
+
+    const password = await bcrypt.hash(datas.newPassword, 10);
+    console.log('bcrypt pass:' + password);
+
+    let updateObject = {
+      pw: password,
+    };
+
+    const updatedPassword = await collection.findOneAndUpdate(
+      { email: datas.email },
+      { $set: updateObject },
+      { returnOriginal: false }
+    );
+
+    callback(null, updatedPassword);
+  } catch (error) {
+    console.error(error);
+    // Handle other errors during password reset
+    callback('Error resetting password', null);
+  }
+},
+
+
   };
   
