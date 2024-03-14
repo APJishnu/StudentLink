@@ -22,9 +22,19 @@ const pdfStorage = multer.diskStorage({
     cb(null, Date.now() + extname); // Rename the PDF file to a unique name with its original extension
   },
 });
+const assignmentpdfStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, './public/assignmentPdf/'); // Store uploaded PDF files in the 'public/pdf' directory
+  },
+  filename: (req, file, cb) => {
+    const extname = path.extname(file.originalname);
+    cb(null, Date.now() + extname); // Rename the PDF file to a unique name with its original extension
+  },
+});
 
 // Multer instances for image and PDF uploads
 const uploadImage = multer({ storage: imageStorage });
 const uploadPdf = multer({ storage: pdfStorage });
+const uploadassignmentPdf = multer({ storage: assignmentpdfStorage });
 
-module.exports = { uploadImage, uploadPdf };
+module.exports = { uploadImage, uploadPdf ,uploadassignmentPdf };

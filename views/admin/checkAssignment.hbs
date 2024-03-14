@@ -6,57 +6,59 @@
     .form-container{
       box-shadow: 0 4px 7px rgba(16, 83, 216, 0.1);
     }
+
+    label{
+      font-weight:lighter;
+      
+      padding-top: 15px;
+    }
   </style>
 
-<section class="py-5">
+<section class="py-2">
   <div class="container">
     <div class="col-md-6 text-right">
-        <a href="/courses" class="btn btn-secondary mt-2 mb-2">Back</a>
-        <a href="/assignmentSub?department={{this.department}}" class="btn btn-secondary mt-2 mb-2" data-toggle="tooltip" title="Assignment submission">More Activities</a>
+        <a href="/admin" class="btn btn-secondary mt-2 mb-2">back to Home</a>
       </div>
     <div class="row justify-content-center">
-      <div class="col-md-8">
-        <div class="card form-container">
-          <div class="card-body">
-            <h2 class="text-center mb-4 title">Get Notes</h2>
+      <div class="col-md-8 justify-content-center align-items-center d-flex">
+        <div class="card form-container col-12 ">
+          <div class="card-body ">
+            <h2 class="text-center mb-4 title ">Check Assignment</h2>
 
-            <form action="/get-Notes" method="post" class="form">
+        <form action="/admin/assignmentCheck" method="post">
 
-
-            <div class="form-group input-container m-4" hidden>
-            <label for="department">Department</label>
-            <select class="form-control p-3" name="department" id="departmentDropdown">
+        
+          <div class="form-group input-container" hidden>
+            <label for="department">Department:</label>
+            <select class="form-control" name="department" id="departmentDropdown">
               <option value='{{this.department}}'>{{this.department}}</option>
             </select>
           </div>
-              
-              <div class="form-group input-container m-4">
-                <label for="semester">Select Semester</label>
-                <select class="form-control input p-3" name="sem" id="semesterDropdown">
-                  <option value="1">Semester 1</option>
-                  <option value="2">Semester 2</option>
-                  <option value="3">Semester 3</option>
-                  <option value="4">Semester 4</option>
-                  <option value="5">Semester 5</option>
-                  <option value="6">Semester 6</option>
-                </select>
-              </div>
 
-              <div class="form-group input-container m-4">
-                <label for="subject">Select Subject</label>
-                <select class="form-control input p-3" name="name" id="subjectDropdown">
-                  <!-- Empty dropdown, to be populated dynamically -->
-                  {{#each subjects}}
-                    <option value="{{this}}">{{this}}</option>
-                  {{/each}}
-                </select>
-              </div>
+          <div class="form-group input-container">
+            <label for="semester">Select Semester:</label>
+            <select class="form-control" name="sem" id="semesterDropdown">
+              <option value="1">Semester 1</option>
+              <option value="2">Semester 2</option>
+              <option value="3">Semester 3</option>
+              <option value="4">Semester 4</option>
+              <option value="5">Semester 5</option>
+              <option value="6">Semester 6</option>
+            </select>
+          </div>
 
-              <div class="text-center">
+          <div class="form-group input-container">
+            <label for="subject">Select Subject:</label>
+            <select class="form-control" name="name" id="subjectDropdown">
+              <!-- Empty dropdown, to be populated dynamically -->
+            </select>
+          </div>
+
+           <div class="text-center">
                 <button type="submit" class="btn btn-success mt-4 submit">Submit</button>
               </div>
-            </form>
-          </div>
+        </form>
+      </div>
         </div>
       </div>
     </div>
@@ -77,6 +79,7 @@
     } else if (department === 'mechanical') {
       url = '/admin/mechanical-subjects';
     }
+
 
 
 
@@ -119,11 +122,4 @@
   document.getElementById('departmentDropdown').addEventListener('change', loadSubjectsAndDepartments);
 
   loadSubjectsAndDepartments();
-
-
-
-
- $(document).ready(function(){
-    $('[data-toggle="tooltip"]').tooltip();
-  });
 </script>

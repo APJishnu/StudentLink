@@ -1,0 +1,31 @@
+<section class="mt-4">
+  <div class="container">
+
+    <h1>{{selectedSubject}} Assignments</h1>
+    
+    {{#each data}}
+      
+      <ul>
+        
+          <li>
+            <strong>Assignment Number:</strong> {{this.number}}<br>
+            <strong>Registration Number:</strong> {{this.Regnumber}}<br>
+            <div class="options">
+              {{#if file}}
+              <button onclick="openPDF('../assignmentPdf/{{this.file}}')" class="btn btn-primary btn-sm">Open PDF</button>
+              <a class="btn btn-primary btn-sm" href="../assignmentPdf/{{this.file }}" download>Download</a>
+              {{else}}
+              <p class="small">No file available for viewing.</p>
+              {{/if}}
+            </div>
+          </li>
+        
+      </ul>
+    {{/each}}
+  </div>
+</section>
+<script>
+  function openPDF(pdfUrl) {
+    window.open(pdfUrl, '_blank');
+  }
+</script>

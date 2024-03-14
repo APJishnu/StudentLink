@@ -3,7 +3,17 @@ var router = express.Router();
 const userHelper = require('../helpers/loginSignup');
 const userHelper2 = require('../helpers/data-helpers');
 const { uploadImage } = require('../helpers/multer');
+const { uploadassignmentPdf} = require('../helpers/multer');
 const nodemailer = require('nodemailer');
+
+
+const verifyLogin = (req, res, next) => {
+  if (req.session.loggedIn) {
+    next();
+  } else {
+    res.redirect('/login');
+  }
+}
 
 
 
@@ -120,8 +130,17 @@ router.post('/signup', async (req, res) => {
   try {
     // Add a new product
     await userHelper.SignUp(req.body, (result) => {
-      const _id = result;
-      res.redirect('/login'); // Redirect to view all products after adding
+
+      if(result === 'userExist'){
+     
+        res.send('<script>alert("User already exists. Please choose a different email or login."); window.location.href="/signup"</script>');
+    
+    
+      }else{
+        const _id = result;
+        res.redirect('/login'); // Redirect to view all products after adding
+      }
+
     });
   } catch (error) {
     console.error(error);
@@ -275,12 +294,17 @@ router.get('/verification', (req, res) => {
   let verificationCollectionId = req.session.verificationCollectionId; // Retrieve verification ID from session
   let verificationCollectionEmail = req.session.verificationCollectionEmail; // Retrieve verification ID from session
   let verificationCollectionCode = req.session.verificationCollectionCode; // Retrieve verification ID from session
+  if (!req.session.verificationCollectionEmail){
+    res.status(500).send('<script>alert("An error occurred during verification."); window.location.href="/login";</script>');
+  }else{
   res.render('user/forgot-password', { verificationCollectionId: verificationCollectionId ,verificationCollectionEmail:verificationCollectionEmail,verificationCollectionCode:verificationCollectionCode});
+
+  }
 });
 
 
 router.post('/verification', async (req,res)=>{
-  let userVerificationCode = req.session.verificationCollectionCode;
+  let userVerificationCode = req.body.VerificationCode;
   let verificationCollectionId = req.session.verificationCollectionId;
   console.log(userVerificationCode ) 
   console.log(verificationCollectionId ) 
@@ -302,12 +326,12 @@ router.post('/verification', async (req,res)=>{
       res.render('user/reset-password',{verificationEmail});
     } else {
       // Verification failed
-      res.send('<script>alert("Invalid verification code."); window.history.go(-2);</script>');
+      res.send('<script>alert("Invalid verification code."); window.location.href="/login"</script>');
 
     }
   } catch (error) {
     console.error("Error occurred during verification:", error);
-    res.status(500).send('<script>alert("An error occurred during verification."); window.history.back();</script>');
+    res.status(500).send('<script>alert("An error occurred during verification."); window.history.go(-2);</script>');
   }
 });
 
@@ -331,6 +355,32 @@ router.post('/reset-password', async (req, res) => {
     res.render('error', { message: 'Error resetting password', error });
   }
 });
+
+
+router.get('/assignmentSub',verifyLogin,(req,res)=>{
+  
+  let department = req.query.department;
+
+  res.render('user/assignment',{admin:false,department:department,user:req.session.user})
+
+});
+
+
+router.post('/assignmentSub', verifyLogin,uploadassignmentPdf.single('file'), async (req, res) => {
+
+  try {
+
+     let success= await userHelper2.addAssignment(req.body, req.file);
+     let department = req.body.department;
+  
+     res.send(`<script>alert("Assignment submitted successfully!"); window.location="/get-Notes?department=${department}";</script>`);
+
+  } catch (error) {
+    console.error(error);
+    res.render('error', { admin: false, message: 'Error adding product', error });
+  }
+});
+
 
 
 

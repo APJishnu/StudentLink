@@ -167,8 +167,9 @@ router.post('/add-files', uploadPdf.single('file'), async (req, res) => {
 
     if (req.session.adminLoggin) {
       await adminHelper.addFile(req.body, req.file, (result) => {
-        const _id = result;
-        res.redirect('/admin');
+        let department = req.body.department;
+
+        res.send(`<script>alert("Notes Added successfully!"); window.location="/admin/admin-viewfiles?department=${department}";</script>`);
       });
 
     } else {
@@ -226,23 +227,59 @@ router.get('/admin-login', async (req, res) => {
 });
 
 router.post('/admin-login', async (req, res) => {
-
   const admindata = req.body;
 
-
-  await adminLogin.checkAdmin(admindata, (result) => {
-
+  await adminLogin.checkAdmin(admindata, (result, error) => {
     if (result) {
-
       req.session.adminLoggin = true;
       req.session.admin = admindata;
-
       res.render('admin/admin-home', { admin: true });
-    }
-    else {
-      res.redirect('/admin/admin-login')
+    } else {
+      if (error) {
+        console.error(error);
+        res.send('<script>alert("' + error + '"); window.location.href="/admin/admin-login"</script>');
+      } else {
+        res.send('<script>alert("An error occurred during login. Please try again later."); window.location.href="/admin/admin-login"</script>');
+      }
     }
   });
-})
+});
+
+
+router.get('/assignmentCheck', async (req, res, next) => {
+  if (req.session.adminLoggin) {
+    let department = req.query.department;
+
+    res.render('admin/checkAssignment', { admin: true,department:department})
+
+  } else {
+    res.redirect('/admin/admin-login');
+  }
+
+});
+
+router.post('/assignmentCheck', async (req, res, next) => {
+  try {
+    // Check if admin is logged in
+    if (!req.session.adminLoggin) {
+      return res.redirect('/admin/admin-login'); // Redirect to admin login page
+    }
+
+    const selectedSubject = req.body.name;
+    const department = req.body.department;
+    console.log(req.body)
+    console.log(selectedSubject);
+
+    const data = await adminHelper.getAssignmentFilesBySubject(department, selectedSubject);
+    const filteredData = data.filter((file) => file.name === selectedSubject);
+    console.log(filteredData)
+    res.render('admin/view-assignment', { admin:true,user: req.session.user, data: filteredData, selectedSubject});
+  } catch (error) {
+    console.error(error);
+    res.render('error', { user: req.session.user, message: 'Error fetching files', error });
+  }
+});
+
+
 
 module.exports = router;

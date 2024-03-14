@@ -1,6 +1,7 @@
 // config/connection.js
 
 const mongoose = require('mongoose');
+const ObjectId=mongoose.Types.ObjectId;
 
 const uri = 'mongodb://localhost:27017/MainProject'; 
 
@@ -98,6 +99,29 @@ const AdminLoginSchema = new mongoose.Schema({
       required: true,
     }
   });
+
+  const assignmentSchema = new mongoose.Schema({
+    user: {
+      type: ObjectId,
+      required: true,
+    },
+    department: { type: String, required: true },
+    sem: { type: String, required: true },
+    name: { type: String, required: true },
+    Regnumber: { type: String, required: true },
+    assignment: [{
+      number: {
+        type:String,
+        required: true,
+      },
+      file: {
+        type: String,
+        required:true,
+      },
+    
+    }],
+});
+
   
   
 
@@ -110,6 +134,7 @@ const collection=new mongoose.model('collection1',LoginSchema)
 const AdminCollection=new mongoose.model('AdminData',AdminSchema)
 const AdminLogin=new mongoose.model('AdminLogin',AdminLoginSchema)
 const verification=new mongoose.model('verification',verificationSchema)
+const AssignmentFile =new mongoose.model('Assignment', assignmentSchema)
 
 
 // const newAdminLogin = new AdminLogin({
@@ -127,4 +152,4 @@ const verification=new mongoose.model('verification',verificationSchema)
 //     });
 
 
-module.exports = { mongoose, db ,collection ,AdminCollection,AdminLogin,verification};
+module.exports = { mongoose, db ,collection ,AdminCollection,AdminLogin,verification,AssignmentFile};

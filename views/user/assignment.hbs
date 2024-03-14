@@ -12,15 +12,14 @@
   <div class="container">
     <div class="col-md-6 text-right">
         <a href="/courses" class="btn btn-secondary mt-2 mb-2">Back</a>
-        <a href="/assignmentSub?department={{this.department}}" class="btn btn-secondary mt-2 mb-2" data-toggle="tooltip" title="Assignment submission">More Activities</a>
       </div>
     <div class="row justify-content-center">
       <div class="col-md-8">
         <div class="card form-container">
           <div class="card-body">
-            <h2 class="text-center mb-4 title">Get Notes</h2>
+            <h2 class="text-center mb-4 title">Assignment Submission</h2>
 
-            <form action="/get-Notes" method="post" class="form">
+            <form action="/assignmentSub" method="post" class="form" enctype="multipart/form-data">
 
 
             <div class="form-group input-container m-4" hidden>
@@ -51,7 +50,25 @@
                   {{/each}}
                 </select>
               </div>
+              <div class="form-group input-container m-4">
+                <label for="assignment number">Assignment Number</label>
+                <input type="text" class="form-control input p-3" name="number">
+              </div>
+              <div class="form-group input-container m-4" hidden>
+                <label for="assignment number">Assignment Number</label>
+                <input type="text" class="form-control input p-3" name="userId" value="{{user._id}}">
+              </div>
+              <div class="form-group input-container m-4">
+                <label for="reg number">Reg Number</label>
+                <input type="text" class="form-control input p-3" name="Regnumber">
+              </div>
+              <div class="form-group input-container  m-4">
+            <label for="file">PDF File:</label>
+            <input type="file" class="form-control p-3" name="file" accept=".pdf">
+          </div>
 
+              
+            
               <div class="text-center">
                 <button type="submit" class="btn btn-success mt-4 submit">Submit</button>
               </div>

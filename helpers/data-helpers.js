@@ -1,5 +1,9 @@
 // data-helpers.js
 const { AdminCollection } = require('../config/connection');
+const { AssignmentFile } = require('../config/connection');
+
+const mongoose = require('mongoose');
+const ObjectId=mongoose.Types.ObjectId;
 
 module.exports = {
   addFile: async (data, filedata, callback) => {
@@ -101,6 +105,51 @@ module.exports = {
     }
 
   },
+
+ addAssignment:async (formData, fileData) => {
+  try {
+    let ifUser = await AssignmentFile.findOne({user : formData.userId});
+
+    if(ifUser){
+
+      await AssignmentFile.updateOne(
+            { user: ObjectId.createFromHexString(formData.userId) },
+            { $push: { assignment: { number: formData.number, file:fileData.filename} } }
+      );
+
+      ifUser = await AssignmentFile.findOne({ user: formData.userId });
+      return ifUser;
+
+    }else{
+
+      await AssignmentFile.insertMany({
+        user:ObjectId.createFromHexString(formData.userId),
+        department:formData.department,
+        sem:formData.sem,
+        name:formData.name,
+        Regnumber:formData.Regnumber,
+        assignment: [{ number: formData.number, file: fileData.filename }],
+      });
+      ifUser = await AssignmentFile.findOne({ user: formData.userId });
+      return ifUser;
+    }
+    
+} catch (error) {
+    console.error(error);
+    throw error;
+}
+},
+
+getAssignmentFilesBySubject: async (department, subject) => {
+  try {
+    const files = await AssignmentFile.find({ department: department, name: subject }).exec();
+    console.log(files);
+    return files;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+},
 
 
 };
