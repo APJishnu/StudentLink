@@ -267,18 +267,23 @@ router.post('/assignmentCheck', async (req, res, next) => {
 
     const selectedSubject = req.body.name;
     const department = req.body.department;
-    console.log(req.body)
+    console.log(req.body);
     console.log(selectedSubject);
 
+    // Fetch all assignments for the selected subject and department
     const data = await adminHelper.getAssignmentFilesBySubject(department, selectedSubject);
-    const filteredData = data.filter((file) => file.name === selectedSubject);
-    console.log(filteredData)
-    res.render('admin/view-assignment', { admin:true,user: req.session.user, data: filteredData, selectedSubject});
+
+   
+
+    // Pass the grouped data to the view
+    res.render('admin/view-assignment', { admin: true, data: data,selectedSubject });
+
   } catch (error) {
     console.error(error);
     res.render('error', { user: req.session.user, message: 'Error fetching files', error });
   }
 });
+
 
 
 

@@ -19,11 +19,11 @@ module.exports = {
 
         const password = await bcrypt.hash(values.pw, 10);
         console.log('bcrypt pass:' + password);
-
+        let userId = new ObjectId;
         // Create a new product instance using the Mongoose model
         const Data = new collection({
 
-
+          user:userId,
           firstname: values.firstname,
           lastname: values.lastname,
           pw: password,
@@ -34,12 +34,9 @@ module.exports = {
         // Save the new product to the MongoDB collection
         await Data.save();
 
-        // Retrieve the newly saved product with its generated ObjectId
-        const savedUser = await collection.findOne({ _id: Data._id }).exec();
-        const UserId = savedUser._id.toString();
-
-        console.log(UserId);
-        callback(null, UserId);
+       
+        console.log(userId);
+        callback(null, userId);
       }
     } catch (error) {
       console.error(error);

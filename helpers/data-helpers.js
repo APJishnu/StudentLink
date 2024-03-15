@@ -1,6 +1,7 @@
 // data-helpers.js
 const { AdminCollection } = require('../config/connection');
 const { AssignmentFile } = require('../config/connection');
+const { collection } = require('../config/connection');
 
 const mongoose = require('mongoose');
 const ObjectId=mongoose.Types.ObjectId;
@@ -140,16 +141,20 @@ module.exports = {
 }
 },
 
-getAssignmentFilesBySubject: async (department, subject) => {
+getAssignmentFilesBySubject :async (department, subject) => {
   try {
-    const files = await AssignmentFile.find({ department: department, name: subject }).exec();
+    const files = await AssignmentFile.find({ department:department, name: subject }).populate({
+      path: 'user', // Populate the 'user' field
+      model:  collection // Use the Login model
+    }).exec();
+    
     console.log(files);
     return files;
   } catch (error) {
     console.error(error);
     throw error;
   }
-},
+}
 
 
 };

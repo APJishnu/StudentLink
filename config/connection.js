@@ -20,6 +20,7 @@ db.once('open', () => {
 });
 
 const LoginSchema=new mongoose.Schema({
+  user:{type : ObjectId , required:true},
 
     firstname:{
         type:String,
