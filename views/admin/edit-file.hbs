@@ -1,12 +1,33 @@
+<style>
+    /* Add box shadow to the dropdowns */
+    .form-group .form-control {
+        box-shadow: 0 2px 4px rgba(63, 37, 229, 0.1);
+    }
+    .form-container{
+        box-shadow: 0 4px 7px rgba(16, 83, 216, 0.1);
+    }
+
+    label{
+        font-weight:lighter;
+        padding-top: 15px;
+    }
+</style>
+
+
 <!-- admin/add-files.hbs -->
 
-<section>
-  <div class="container mt-5">
-    <div class="row">
-      <div class="col-md-6">
-        <h2 class="text-center">Edit Notes</h2>
+<section class="py-2">
+  <div class="container rounded-4">
+    <div class="col-md-6 text-right">
+        <a href="/admin/admin-viewfiles?department={{department}}" class="btn btn-secondary mt-2 mb-2">back</a>
+      </div>
+    <div class="row justify-content-center ">
+      <div class="col-md-8 justify-content-center align-items-center d-flex ">
+        <div class="card form-container col-12 rounded-4">
+          <div class="card-body">
+            <h2 class="text-center mb-4 title ">Edit Notes</h2>
 
-        <form action="/admin/edit-files/{{file._id}}" method="post" enctype="multipart/form-data">
+        <form action="/admin/edit-files?id={{file._id}}&department={{this.department}}" method="post" enctype="multipart/form-data">
 
           
           <div class="form-group">
@@ -51,6 +72,8 @@
 
           <button type="submit" class="btn btn-success mt-4">Submit</button>
         </form>
+        </div>
+        </div>
       </div>
     </div>
   </div>

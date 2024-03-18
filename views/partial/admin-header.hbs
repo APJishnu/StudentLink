@@ -1,13 +1,13 @@
 {{#if admin}}
 <!-- Navbar Start -->
-<nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
+<nav class="navbar navbar-expand-lg bg-dark navbar-light shadow sticky-top p-0">
     <a href="/admin" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
         <h2 class="m-0 text-primary"><i class="fa fa-book me-3"></i>StudentLink.<span style="font-size:20px">Admin</span></h2>
     </a>
     
     <div class="collapse navbar-collapse" id="navbarCollapse">
         <div class="navbar-nav ms-auto p-4 p-lg-0">
-
+          
             
             
            
@@ -27,10 +27,21 @@
               </ul>
           </div>
         {{else}}
-          <a href="/admin" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">
-            Admin
-            <i class="fa fa-arrow-right ms-3"></i>
-          </a>
+        <div class="dropdown mx-5 p-4">
+              <button class="btn btn-primary dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown">
+               Admin
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                  <li hidden><a class="dropdown-item" href="/profile">Profile</a></li>
+                  <li>
+                    <form action="/admin/logout" method="GET">
+                      <button type="submit" class="dropdown-item">Logout</button>
+                    </form>
+                  </li>
+              </ul>
+          </div>
+        
+          
         {{/if}}
     </div>
 </nav>

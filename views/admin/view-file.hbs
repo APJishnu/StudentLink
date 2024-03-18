@@ -1,13 +1,14 @@
 
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
 
-<section>
-  <div class="container">
+<section class="p-5" style="height: 100vh;"> 
+  <div class="container px-5 rounded-4" style="background-color:#fff">
     <div class="col-md-6 text-right mt-4">
       <button onclick="loadPages('{{this.department}}')" class="btn btn-success ml-auto">Add Notes</button>
             <a href="/admin/assignmentCheck?department={{this.department}}" class="btn btn-secondary mt-2 mb-2" data-toggle="tooltip" title="check assignment details">More Activities</a>
     </div>
     <h3 class="text-center mt-2">{{this.department}}</h3>
-    <table class="table mt-5">
+    <table id="dataTable">
       <thead>
         <tr>
           <th scope="col">No</th>
@@ -20,22 +21,22 @@
       <tbody>
         {{#each data}}
         <tr>
-          <th scope="row">{{inc @index}}</th>
-          <td>{{this.name}}</td>
-          <td>{{this.content}}</td>
+          <th class="p-3" scope="row">{{inc @index}}</th>
+          <td class="p-3">{{this.name}}</td>
+          <td class="p-3">{{this.content}}</td>
          {{#if file}}
-         <td>
+         <td class="p-3"> 
             
             <button onclick="openPDF('../pdf/{{this.file}}')" class="btn btn-primary">Open PDF</button>
-            <p>This file is not a PDF. <a href="../pdf/{{this.file }}" download>Download</a></p>
+            <a class="btn text-center text-muted btn-outline-secondary rounded-2" href="../pdf/{{this.file }}" download>Download</a>
             
           </td>
            {{else}}
            <p>No file available for viewing.</p>
            {{/if}}
-           <td>
-            <a href="/admin/edit-files/{{this._id}}" class="btn btn-primary">Edit</a>
-            <a href="/admin/delete/{{this._id}}" class="btn btn-danger">Delete</a>
+           <td class="p-3">
+            <a href="/admin/edit-files?id={{this._id}}&department={{this.department}}" class="btn btn-primary">Edit</a>
+            <a href="/admin/delete?id={{this._id}}&department={{this.department}}" class="btn btn-danger">Delete</a>
           </td>
            
            
@@ -46,6 +47,13 @@
     </table>
   </div>
 </section>
+
+ <!-- Include jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- Include DataTables JS -->
+  <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+  <!-- Include Bootstrap JS (for responsive behavior) -->
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <script>
     function openPDF(pdfUrl) {
@@ -61,4 +69,15 @@
    $(document).ready(function(){
     $('[data-toggle="tooltip"]').tooltip();
   });
-</script>
+
+    jQuery.noConflict();
+    (function($) {
+      // Use $ for jQuery code here
+      $('#dataTable').DataTable({
+        "dom": '<"row justify-content-between"lfB>rtip',
+        "buttons": [
+          'copy', 'csv', 'excel', 'pdf', 'print'
+        ]
+      });
+    })(jQuery);
+  </script>

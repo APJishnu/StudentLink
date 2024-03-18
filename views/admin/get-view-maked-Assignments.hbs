@@ -14,20 +14,19 @@
     }
   </style>
 
-<section class="py-2"  style="height:100vh">
+<section class="py-2" style="height:100vh">
   <div class="container mt-3 rounded-4">
     <div class="col-md-6 text-right">
-        <a href="/admin/admin-viewfiles?department={{department}}" class="btn btn-secondary mt-2 mb-2">back</a>
-        <a href="/admin/makeAssignment?department={{department}}" class="btn btn-secondary mt-2 mb-2">make schedule</a>
+        <a href="/admin/makeAssignment?department={{department}}" class="btn btn-secondary mt-2 mb-2">back</a>
       </div>
     
     <div class="row justify-content-center">
       <div class="col-md-8 justify-content-center align-items-center d-flex">
         <div class="card form-container col-12 rounded-4">
           <div class="card-body ">
-            <h2 class="text-center mb-4 title ">Check Assignment</h2>
+            <h2 class="text-center mb-4 title ">Get view Maked Assignment</h2>
 
-        <form action="/admin/assignmentCheck" method="post">
+        <form action="/admin/viewAssignmentSchedule" method="post">
 
         
           <div class="form-group input-container" hidden>

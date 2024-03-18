@@ -1,0 +1,48 @@
+<style>
+  .email {
+    font-size: medium;
+    color: blueviolet;
+  }
+</style>
+
+<section class=""  style="height:100vh">
+  <div class="container p-5 rounded-4">
+    {{#if this.assignmentSchedules}}
+    {{#each assignmentSchedules}}
+    <h1 class="text-center mb-5" style="color:#a39e9e">{{this.name}}<span class="small" >Assignments schedules</span></h1> 
+      
+     
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Assignment Number</th>
+            <th>DateTime</th>
+            <th>Description</th>
+            <th>Options</th>
+
+          </tr>
+        </thead>
+        <tbody>
+        
+          
+              <tr>
+                <td>{{this.number}}</td>
+                <td>{{this.dateAndTime}}</td>
+                <td>{{this.description}}</td>
+                <td><a href="/admin/deleteMakedAssignment/{{this._id}}" class="btn btn-danger">Delete</a></td>
+              </tr>
+        
+        </tbody>
+      </table>
+
+      
+    {{/each}}
+        {{else}}
+    <p class="text-center mt-5" style="color:#a39e9e">No admin create assignment schedule.create  one by clicking the back button below.</p>
+
+    <div class="text-center text-muted mb-5">
+          <a href="/admin/makeAssignment?department={{department}}" class="btn btn-outline-secondary rounded-4">Back</a>
+        </div>
+    {{/if}}
+  </div>
+</section>

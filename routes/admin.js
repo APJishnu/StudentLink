@@ -152,13 +152,14 @@ router.post('/mechanical-subjects', (req, res) => {
 
 
 
-router.get('/delete/:id', async (req, res) => {
-  const adminIdToDelete = req.params.id;
+router.get('/delete', async (req, res) => {
+  const adminIdToDelete = req.query.id;
   console.log('hai', req.params.id);
+  let department = req.query.department;
 
   await adminHelper.deleteAdminById(adminIdToDelete);
 
-  res.redirect('/admin');
+  res.send(`<script>alert("Notes Deleted successfully!"); window.location="/admin/admin-viewfiles?department=${department}";</script>`);
 });
 
 router.post('/add-files', uploadPdf.single('file'), async (req, res) => {
@@ -182,16 +183,17 @@ router.post('/add-files', uploadPdf.single('file'), async (req, res) => {
   }
 });
 
-router.get('/edit-files/:id', async (req, res) => {
+router.get('/edit-files', async (req, res) => {
   if (req.session.adminLoggin) {
 
-    const fileId = req.params.id;
+    const fileId = req.query.id;
+    let department = req.query.department;
 
     await adminHelper.getFileDetails(fileId, (file) => {
 
       console.log("File:", file)
 
-      res.render('admin/edit-file', { admin: true, file });
+      res.render('admin/edit-file', { admin: true, file ,department});
 
     })
 
@@ -204,17 +206,18 @@ router.get('/edit-files/:id', async (req, res) => {
 })
 
 
-router.post('/edit-files/:id', uploadPdf.single('file'), async (req, res) => {
+router.post('/edit-files/', uploadPdf.single('file'), async (req, res) => {
 
 
-  const currentId = req.params.id;
+  const currentId = req.query.id;
   const data = req.body;
   const newFile = req.file;
+  let department = req.query.department;
 
   await adminHelper.editProducts(currentId, data, newFile, (result) => {
 
     console.log('Product updated successfully:', result);
-    res.redirect('/admin')
+    res.send(`<script>alert("Notes Edited successfully!"); window.location="/admin/admin-viewfiles?department=${department}";</script>`);
 
   })
 
@@ -276,7 +279,7 @@ router.post('/assignmentCheck', async (req, res, next) => {
    
 
     // Pass the grouped data to the view
-    res.render('admin/view-assignment', { admin: true, data: data,selectedSubject });
+    res.render('admin/view-assignment', { admin: true, data: data,selectedSubject,department });
 
   } catch (error) {
     console.error(error);
@@ -284,6 +287,83 @@ router.post('/assignmentCheck', async (req, res, next) => {
   }
 });
 
+router.get('/makeAssignment',(req,res)=>{
+  if(req.session.adminLoggin){
+  let department = req.query.department;
+
+  res.render('admin/makeAssignment',{admin :true ,department:department});
+
+}else{
+  res.redirect('/admin/');
+}
+});
+
+
+router.post('/makeAssignment',async(req,res)=>{
+  try {
+  if(req.session.adminLoggin){
+
+    let createdAssignement  = await adminHelper.makeAssignmentSchedule(req.body);
+    let department = req.body.department;
+    res.send(`<script>alert("Assignment created successfully!"); window.location="/admin/assignmentCheck?department=${department}";</script>`);
+
+  }else{
+    res.redirect('/admin/');
+  }
+} catch (error) {
+  console.error(error);
+  res.render('error', { admin: false, message: 'Error adding product', error });
+ }
+
+});
+
+
+router.get('/viewAssignmentSchedule',(req,res)=>{
+
+  if(req.session.adminLoggin){
+    let department = req.query.department
+   
+    res.render('admin/get-view-maked-Assignments',{admin:true,department:department})
+  }else{
+    res.redirect('/admin/')
+  }
+});
+router.post('/viewAssignmentSchedule',async(req,res)=>{
+  
+  if(req.session.adminLoggin){
+    
+      req.session.MakedAssignmentData = req.body;
+      let department = req.body.department;
+
+    let assignmentSchedules=await adminHelper.getAssignmentSchedule(req.body);
+    res.render('admin/view-makedAssignment',{admin:true,assignmentSchedules:assignmentSchedules,department})
+  }else{
+    res.redirect('/admin/')
+  }
+});
+
+router.get('/deleteMakedAssignment/:id', async (req, res) => {
+  const DeleteId = req.params.id;
+  console.log('hai', req.params.id);
+
+  await adminHelper.deleteMakedAssignment(DeleteId);
+
+  res.redirect('/admin/');
+});
+
+router.get('/logout',(req,res)=>{
+
+  req.session.destroy((err) => {
+    if (err) {
+      console.error(err);
+    }
+    res.redirect('/admin/admin-login'); // Redirect to the login page after logout
+  });
+})
+
+
+
+  
 
 
 

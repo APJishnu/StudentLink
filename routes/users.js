@@ -185,7 +185,7 @@ router.post('/get-Notes', async (req, res) => {
         res.render('error', { user: req.session.user, message: 'Error fetching files', error });
       } else {
         const filteredData = data.filter((file) => file.name === selectedSubject);
-        res.render('user/view-file', { user: req.session.user, data: filteredData, selectedSubject ,view:true});
+        res.render('user/view-file', { user: req.session.user, data: filteredData, selectedSubject ,department});
       }
     });
   } catch (error) {
@@ -357,23 +357,42 @@ router.post('/reset-password', async (req, res) => {
 });
 
 
-router.get('/assignmentSub',verifyLogin,(req,res)=>{
+router.get('/assignmentSub',verifyLogin,async(req,res)=>{
   
   let department = req.query.department;
 
-  res.render('user/assignment',{admin:false,department:department,user:req.session.user})
+  let ifAssignment = await userHelper2.getIfAssignment(department,req.session.user._id);
+
+  res.render('user/assignment',{admin:false,department:department,user:req.session.user,ifAssignment:ifAssignment})
 
 });
 
 
-router.post('/assignmentSub', verifyLogin,uploadassignmentPdf.single('file'), async (req, res) => {
+router.post('/assignmentSub', verifyLogin, (req, res) => {
+
+  try {
+
+    
+     let assignmentCollection = req.body;
+    let submittedId=req.body._id;
+    console.log(submittedId)
+  
+     res.render('user/assignmentSubmit',{admin:false,user:req.session.user,assignmentCollection});
+
+  } catch (error) {
+    console.error(error);
+    res.render('error', { admin: false, message: 'Error adding product', error });
+  }
+});
+
+router.post('/uploadAssignment', verifyLogin,uploadassignmentPdf.single('file'), async (req, res) => {
 
   try {
 
      let success= await userHelper2.addAssignment(req.body, req.file);
      let department = req.body.department;
   
-     res.send(`<script>alert("Assignment submitted successfully!"); window.location="/get-Notes?department=${department}";</script>`);
+     res.send(`<script>alert("Assignment submitted successfully!"); window.location="/assignmentSub?department=${department}";</script>`);
 
   } catch (error) {
     console.error(error);
