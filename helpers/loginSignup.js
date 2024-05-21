@@ -21,20 +21,12 @@ module.exports = {
         console.log('bcrypt pass:' + password);
         let userId = new ObjectId;
         // Create a new product instance using the Mongoose model
-        const Data = new collection({
-
-          user:userId,
-          firstname: values.firstname,
-          lastname: values.lastname,
-          pw: password,
-          email: values.email,
-          phone: values.phone,
-        });
+        
 
         // Save the new product to the MongoDB collection
         await Data.save();
 
-       
+
         console.log(userId);
         callback(null, userId);
       }
@@ -102,7 +94,7 @@ module.exports = {
   checkAdmin: async (admindata, callback) => {
     try {
       const check = await AdminLogin.findOne({ email: admindata.email });
-  
+
       if (check) {
         if (check.password === admindata.pw) {
           callback(check, null);
@@ -119,7 +111,7 @@ module.exports = {
       callback(error);
     }
   },
-  
+
 
   verificationEmail: (email, verificationCode) => {
 

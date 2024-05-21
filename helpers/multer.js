@@ -37,4 +37,4 @@ const uploadImage = multer({ storage: imageStorage });
 const uploadPdf = multer({ storage: pdfStorage });
 const uploadassignmentPdf = multer({ storage: assignmentpdfStorage });
 
-module.exports = { uploadImage, uploadPdf ,uploadassignmentPdf };
+module.exports = { uploadImage, uploadPdf, uploadassignmentPdf };

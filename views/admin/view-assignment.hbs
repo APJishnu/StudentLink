@@ -5,13 +5,14 @@
   }
 </style>
 
-<section class="">
-  <div class="container p-5 rounded-4" style="height: 100vh;">
-    <h1 class="text-center mt-5 text-light">{{name}} Assignments</h1>
+<section class="p-5">
+  <div class="container rounded-4" style="height: 100vh;background-color:#fff">
+    <div class="col-md-12 text-right mt-4 p-5">
+    <h1 class="text-center mt-5 mb-5">{{selectedSubject}}: submitted  Assignments</h1>
     
     {{#each data}}
-      <h2>User: {{this.user.firstname}} {{this.user.lastname}}</h2>
-      <p>Email: <span class="email">{{this.user.email}}</span></p>
+      <h2 class="text-secondary">User: {{this.user.firstname}} {{this.user.lastname}}</h2>
+      <p class="text-secondary" >Email: <span class="email">{{this.user.email}}</span></p>
       <table class="table">
         <thead>
           <tr>
@@ -44,6 +45,7 @@
           <a href="/admin/assignmentCheck?department={{department}}" class="btn btn-outline-secondary rounded-4">Back</a>
         </div>
     {{/unless}}
+    </div>
   </div>
 </section>
 

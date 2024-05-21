@@ -19,7 +19,7 @@ db.once('open', () => {
   console.log('Connected to MongoDB');
 });
 
-const LoginSchema = new mongoose.Schema({
+const signupSchema = new mongoose.Schema({
   user: { type: ObjectId, required: true },
 
   firstname: {
@@ -72,6 +72,7 @@ const AdminSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+
 
 
 })
@@ -157,7 +158,7 @@ const makeAssignmentSchema = new mongoose.Schema({
 
 
 
-const collection = new mongoose.model('collection1', LoginSchema)
+const collection = new mongoose.model('collection1', signupSchema)
 const AdminCollection = new mongoose.model('AdminData', AdminSchema)
 const AdminLogin = new mongoose.model('AdminLogin', AdminLoginSchema)
 const verification = new mongoose.model('verification', verificationSchema)

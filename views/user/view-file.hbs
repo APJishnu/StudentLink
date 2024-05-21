@@ -8,6 +8,7 @@
       </div>
       <div class="col-md-6 text-right">
         <a href="/get-Notes?department={{department}}" class="btn btn-secondary mt-2">Back</a>
+         <a href="/assignmentSub?department={{department}}&sem={{sem}}&name={{selectedSubject}}" class="btn btn-secondary mt-2" data-toggle="tooltip" title="Assignment submission">More Activities</a>
       </div>
     </div>
     <div class="row mt-4">
@@ -19,6 +20,7 @@
             <div class="content">
               <h5 class="card-title">{{this.content}}</h5>
               <p class="card-text">{{this.moduleName}}</p>
+              
             </div>
           </div>
           <div class="card-footer">

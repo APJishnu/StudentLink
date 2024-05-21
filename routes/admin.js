@@ -6,12 +6,12 @@ const { uploadPdf } = require('../helpers/multer');
 const adminHelper = require('../helpers/data-helpers');
 const adminLogin = require('../helpers/loginSignup');
 
-router.get('/',async(req,res)=>{
-  if(req.session.adminLoggin){
-    res.render('admin/admin-home',{admin:true})
-  }else{
+router.get('/', async (req, res) => {
+  if (req.session.adminLoggin) {
+    res.render('admin/admin-home', { admin: true })
+  } else {
     res.redirect('/admin/admin-login')
-  } 
+  }
 })
 
 router.get('/admin-viewfiles', async function (req, res, next) {
@@ -33,9 +33,9 @@ router.get('/admin-viewfiles', async function (req, res, next) {
 
 router.get('/add-files', (req, res, next) => {
   if (req.session.adminLoggin) {
-    let department=req.query.department;
-    console.log("addfile department",department)
-    res.render('admin/add-files', { admin: true,department });
+    let department = req.query.department;
+    console.log("addfile department", department)
+    res.render('admin/add-files', { admin: true, department });
   } else {
     res.redirect('/admin/admin-login')
   }
@@ -148,10 +148,6 @@ router.post('/mechanical-subjects', (req, res) => {
 
 
 
-
-
-
-
 router.get('/delete', async (req, res) => {
   const adminIdToDelete = req.query.id;
   console.log('hai', req.params.id);
@@ -193,15 +189,13 @@ router.get('/edit-files', async (req, res) => {
 
       console.log("File:", file)
 
-      res.render('admin/edit-file', { admin: true, file ,department});
+      res.render('admin/edit-file', { admin: true, file, department });
 
     })
-
 
   } else {
     res.redirect('/admin/admin-login')
   }
-
 
 })
 
@@ -253,7 +247,7 @@ router.get('/assignmentCheck', async (req, res, next) => {
   if (req.session.adminLoggin) {
     let department = req.query.department;
 
-    res.render('admin/checkAssignment', { admin: true,department:department})
+    res.render('admin/checkAssignment', { admin: true, department: department })
 
   } else {
     res.redirect('/admin/admin-login');
@@ -276,10 +270,10 @@ router.post('/assignmentCheck', async (req, res, next) => {
     // Fetch all assignments for the selected subject and department
     const data = await adminHelper.getAssignmentFilesBySubject(department, selectedSubject);
 
-   
+
 
     // Pass the grouped data to the view
-    res.render('admin/view-assignment', { admin: true, data: data,selectedSubject,department });
+    res.render('admin/view-assignment', { admin: true, data: data, selectedSubject, department });
 
   } catch (error) {
     console.error(error);
@@ -287,57 +281,60 @@ router.post('/assignmentCheck', async (req, res, next) => {
   }
 });
 
-router.get('/makeAssignment',(req,res)=>{
-  if(req.session.adminLoggin){
-  let department = req.query.department;
+router.get('/makeAssignment', (req, res) => {
+  if (req.session.adminLoggin) {
+    let department = req.query.department;
 
-  res.render('admin/makeAssignment',{admin :true ,department:department});
+    res.render('admin/makeAssignment', { admin: true, department: department });
 
-}else{
-  res.redirect('/admin/');
-}
-});
-
-
-router.post('/makeAssignment',async(req,res)=>{
-  try {
-  if(req.session.adminLoggin){
-
-    let createdAssignement  = await adminHelper.makeAssignmentSchedule(req.body);
-    let department = req.body.department;
-    res.send(`<script>alert("Assignment created successfully!"); window.location="/admin/assignmentCheck?department=${department}";</script>`);
-
-  }else{
+  } else {
     res.redirect('/admin/');
   }
-} catch (error) {
-  console.error(error);
-  res.render('error', { admin: false, message: 'Error adding product', error });
- }
+});
+
+
+router.post('/makeAssignment', async (req, res) => {
+  try {
+    if (req.session.adminLoggin) {
+
+      let createdAssignement = await adminHelper.makeAssignmentSchedule(req.body);
+      let department = req.body.department;
+      res.send(`<script>alert("Assignment created successfully!"); window.location="/admin/assignmentCheck?department=${department}";</script>`);
+
+    } else {
+      res.redirect('/admin/');
+    }
+  } catch (error) {
+    console.error(error);
+    res.render('error', { admin: false, message: 'Error adding product', error });
+  }
 
 });
 
 
-router.get('/viewAssignmentSchedule',(req,res)=>{
+router.get('/viewAssignmentSchedule', (req, res) => {
 
-  if(req.session.adminLoggin){
+  if (req.session.adminLoggin) {
     let department = req.query.department
-   
-    res.render('admin/get-view-maked-Assignments',{admin:true,department:department})
-  }else{
+
+    res.render('admin/get-view-maked-Assignments', { admin: true, department: department })
+  } else {
     res.redirect('/admin/')
   }
 });
-router.post('/viewAssignmentSchedule',async(req,res)=>{
-  
-  if(req.session.adminLoggin){
-    
-      req.session.MakedAssignmentData = req.body;
-      let department = req.body.department;
+router.post('/viewAssignmentSchedule', async (req, res) => {
 
-    let assignmentSchedules=await adminHelper.getAssignmentSchedule(req.body);
-    res.render('admin/view-makedAssignment',{admin:true,assignmentSchedules:assignmentSchedules,department})
-  }else{
+  if (req.session.adminLoggin) {
+
+    req.session.MakedAssignmentData = req.body;
+    let department = req.body.department;
+    let subject = req.body.name;
+
+
+
+    let assignmentSchedules = await adminHelper.getAssignmentSchedule(req.body);
+    res.render('admin/view-makedAssignment', { admin: true, assignmentSchedules: assignmentSchedules, department, subject: subject })
+  } else {
     res.redirect('/admin/')
   }
 });
@@ -351,7 +348,7 @@ router.get('/deleteMakedAssignment/:id', async (req, res) => {
   res.redirect('/admin/');
 });
 
-router.get('/logout',(req,res)=>{
+router.get('/logout', (req, res) => {
 
   req.session.destroy((err) => {
     if (err) {
@@ -360,11 +357,6 @@ router.get('/logout',(req,res)=>{
     res.redirect('/admin/admin-login'); // Redirect to the login page after logout
   });
 })
-
-
-
-  
-
 
 
 module.exports = router;

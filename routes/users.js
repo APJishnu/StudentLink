@@ -3,7 +3,7 @@ var router = express.Router();
 const userHelper = require('../helpers/loginSignup');
 const userHelper2 = require('../helpers/data-helpers');
 const { uploadImage } = require('../helpers/multer');
-const { uploadassignmentPdf} = require('../helpers/multer');
+const { uploadassignmentPdf } = require('../helpers/multer');
 const nodemailer = require('nodemailer');
 
 
@@ -15,25 +15,22 @@ const verifyLogin = (req, res, next) => {
   }
 }
 
-
-
+ 
 function generateVerificationCode() {
-  return Math.floor(1000 + Math.random() * 9000); 
+  return Math.floor(1000 + Math.random() * 9000);
 }
 
 
 var transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-      user: 'photosg707@gmail.com',
-      pass: 'jdcgtwggpasadgik'
+    user: 'photosg707@gmail.com',
+    pass: 'jdcgtwggpasadgik'
   },
-  tls:{
-    rejectUnauthorized : false
-  } 
+  tls: {
+    rejectUnauthorized: false
+  }
 });
-
-
 
 
 /* GET users listing. */
@@ -83,7 +80,7 @@ router.get('/get-Notes', async (req, res, next) => {
   if (req.session.loggedIn) {
     let department = req.query.department;
 
-    res.render('user/getNotes', { admin: false, user: req.session.user ,department})
+    res.render('user/getNotes', { admin: false, user: req.session.user, department })
 
   } else {
     res.redirect('/login');
@@ -94,7 +91,7 @@ router.get('/get-Notes', async (req, res, next) => {
 router.get('/printing', async (req, res, next) => {
   if (req.session.loggedIn) {
 
-    res.render('user/printing', { admin: false, user: req.session.user ,printing:true})
+    res.render('user/printing', { admin: false, user: req.session.user, printing: true })
 
   } else {
     res.redirect('/login');
@@ -107,7 +104,7 @@ router.get('/printing', async (req, res, next) => {
 router.get('/login', (req, res) => {
 
   console.log(req.session.loginErr)
-  res.render('user/login', { admin: false, login: true ,loginErr:req.session.loginErr});
+  res.render('user/login', { admin: false, login: true, loginErr: req.session.loginErr });
   req.session.loginErr = false;
 });
 router.get('/logout', (req, res) => {
@@ -131,12 +128,12 @@ router.post('/signup', async (req, res) => {
     // Add a new product
     await userHelper.SignUp(req.body, (result) => {
 
-      if(result === 'userExist'){
-     
+      if (result === 'userExist') {
+
         res.send('<script>alert("User already exists. Please choose a different email or login."); window.location.href="/signup"</script>');
-    
-    
-      }else{
+
+
+      } else {
         const _id = result;
         res.redirect('/login'); // Redirect to view all products after adding
       }
@@ -152,7 +149,7 @@ router.post('/signup', async (req, res) => {
 
 router.post('/login', async (req, res) => {
   try {
-    await userHelper.Login(req.body, (result,msg) => {
+    await userHelper.Login(req.body, (result, msg) => {
       console.log(result)
       if (result == null) {
 
@@ -176,16 +173,14 @@ router.post('/login', async (req, res) => {
 router.post('/get-Notes', async (req, res) => {
   const selectedSubject = req.body.name;
   const department = req.body.department;
-  console.log(req.body)
-  console.log(selectedSubject);
-
+  let sem = req.body.sem; 
   try {
-    await userHelper2.getFilesBySubject(department,selectedSubject, (error, data) => {
+    await userHelper2.getFilesBySubject(department, selectedSubject, (error, data) => {
       if (error) {
         res.render('error', { user: req.session.user, message: 'Error fetching files', error });
       } else {
         const filteredData = data.filter((file) => file.name === selectedSubject);
-        res.render('user/view-file', { user: req.session.user, data: filteredData, selectedSubject ,department});
+        res.render('user/view-file', { user: req.session.user, data: filteredData, selectedSubject, department ,sem});
       }
     });
   } catch (error) {
@@ -227,13 +222,13 @@ router.post('/upload', uploadImage.single('photo'), async (req, res) => {
   }
 });
 
-router.post('/remove-profilePhoto',async(req,res)=>{
-  if(req.session.loggedIn){
-    
-      delete req.session.user.photo;
-   
-      res.json({status:true})
-  }else{
+router.post('/remove-profilePhoto', async (req, res) => {
+  if (req.session.loggedIn) {
+
+    delete req.session.user.photo;
+
+    res.json({ status: true })
+  } else {
     res.sendStatus(401).end()
   }
 });
@@ -242,7 +237,7 @@ router.post('/remove-profilePhoto',async(req,res)=>{
 router.post('/forgotPassword', async (req, res) => {
 
   const verificationCode = generateVerificationCode();
-    res.json({status : true , verificationCode:verificationCode})
+  res.json({ status: true, verificationCode: verificationCode })
 })
 
 
@@ -252,12 +247,12 @@ router.post('/forgotPassword', async (req, res) => {
 router.post('/verifyingEmail', async (req, res) => {
   const { emailInput, verificationCode } = req.body;
   let email = emailInput;
-  
+
   const mailOptions = {
-      from: 'photosg707@gmail.com',
-      to: email,
-      subject: 'Password Reset Verification',
-      html: `<h2>Email Verification</h2>
+    from: 'photosg707@gmail.com',
+    to: email,
+    subject: 'Password Reset Verification',
+    html: `<h2>Email Verification</h2>
            <h4>Your verification code is: ${verificationCode}</h4>`
   };
 
@@ -265,27 +260,27 @@ router.post('/verifyingEmail', async (req, res) => {
   console.log(verificationCollection);
 
   transporter.sendMail(mailOptions, function (error, info) {
-      if (error) {
-          console.log(error);
-          res.status(500).json({ error: 'Failed to send verification code.' });
-      } else {
-          console.log('Email sent: ' + info.response);
-          req.session.verificationCollectionId = verificationCollection._id;
-          req.session.verificationCollectionEmail = verificationCollection.email;
-          req.session.verificationCollectionCode = verificationCollection.verificationCode;
+    if (error) {
+      console.log(error);
+      res.status(500).json({ error: 'Failed to send verification code.' });
+    } else {
+      console.log('Email sent: ' + info.response);
+      req.session.verificationCollectionId = verificationCollection._id;
+      req.session.verificationCollectionEmail = verificationCollection.email;
+      req.session.verificationCollectionCode = verificationCollection.verificationCode;
 
-          res.redirect('/verification');
-          
-          // Set a timeout to delete verification data after 5 minutes
-          setTimeout(async () => {
-              try {
-                  await userHelper.deleteVerificationDataById(verificationCollection._id);
-                  console.log("Verification data deleted after 30 seconds");
-              } catch (error) {
-                  console.error("Error occurred while deleting verification data:", error);
-              }
-          }, 30 * 1000); // 30 seconds
-      }
+      res.redirect('/verification');
+
+      // Set a timeout to delete verification data after 5 minutes
+      setTimeout(async () => {
+        try {
+          await userHelper.deleteVerificationDataById(verificationCollection._id);
+          console.log("Verification data deleted after 30 seconds");
+        } catch (error) {
+          console.error("Error occurred while deleting verification data:", error);
+        }
+      }, 30 * 1000); // 30 seconds
+    }
   });
 });
 
@@ -294,20 +289,20 @@ router.get('/verification', (req, res) => {
   let verificationCollectionId = req.session.verificationCollectionId; // Retrieve verification ID from session
   let verificationCollectionEmail = req.session.verificationCollectionEmail; // Retrieve verification ID from session
   let verificationCollectionCode = req.session.verificationCollectionCode; // Retrieve verification ID from session
-  if (!req.session.verificationCollectionEmail){
+  if (!req.session.verificationCollectionEmail) {
     res.status(500).send('<script>alert("An error occurred during verification."); window.location.href="/login";</script>');
-  }else{
-  res.render('user/forgot-password', { verificationCollectionId: verificationCollectionId ,verificationCollectionEmail:verificationCollectionEmail,verificationCollectionCode:verificationCollectionCode});
+  } else {
+    res.render('user/forgot-password', { verificationCollectionId: verificationCollectionId, verificationCollectionEmail: verificationCollectionEmail, verificationCollectionCode: verificationCollectionCode });
 
   }
 });
 
 
-router.post('/verification', async (req,res)=>{
+router.post('/verification', async (req, res) => {
   let userVerificationCode = req.body.VerificationCode;
   let verificationCollectionId = req.session.verificationCollectionId;
-  console.log(userVerificationCode ) 
-  console.log(verificationCollectionId ) 
+  console.log(userVerificationCode)
+  console.log(verificationCollectionId)
 
   try {
     // Retrieve the verification data from the database
@@ -322,8 +317,8 @@ router.post('/verification', async (req,res)=>{
       // Verification successful, perform actions like resetting password
       // Delete the verification data
       await userHelper.deleteVerificationDataById(verificationCollectionId);
-     
-      res.render('user/reset-password',{verificationEmail});
+
+      res.render('user/reset-password', { verificationEmail });
     } else {
       // Verification failed
       res.send('<script>alert("Invalid verification code."); window.location.href="/login"</script>');
@@ -357,13 +352,16 @@ router.post('/reset-password', async (req, res) => {
 });
 
 
-router.get('/assignmentSub',verifyLogin,async(req,res)=>{
-  
+router.get('/assignmentSub', verifyLogin, async (req, res) => {
+
   let department = req.query.department;
+  let sem = req.query.sem;
+  console.log("hai",sem)
+  let name = req.query.name;
 
-  let ifAssignment = await userHelper2.getIfAssignment(department,req.session.user._id);
+  let ifAssignment = await userHelper2.getIfAssignment(department,sem,name, req.session.user._id);
 
-  res.render('user/assignment',{admin:false,department:department,user:req.session.user,ifAssignment:ifAssignment})
+  res.render('user/assignment', { admin: false, department: department, user: req.session.user, ifAssignment: ifAssignment })
 
 });
 
@@ -372,12 +370,12 @@ router.post('/assignmentSub', verifyLogin, (req, res) => {
 
   try {
 
-    
-     let assignmentCollection = req.body;
-    let submittedId=req.body._id;
+
+    let assignmentCollection = req.body;
+    let submittedId = req.body._id;
     console.log(submittedId)
-  
-     res.render('user/assignmentSubmit',{admin:false,user:req.session.user,assignmentCollection});
+
+    res.render('user/assignmentSubmit', { admin: false, user: req.session.user, assignmentCollection });
 
   } catch (error) {
     console.error(error);
@@ -385,14 +383,14 @@ router.post('/assignmentSub', verifyLogin, (req, res) => {
   }
 });
 
-router.post('/uploadAssignment', verifyLogin,uploadassignmentPdf.single('file'), async (req, res) => {
+router.post('/uploadAssignment', verifyLogin, uploadassignmentPdf.single('file'), async (req, res) => {
 
   try {
 
-     let success= await userHelper2.addAssignment(req.body, req.file);
-     let department = req.body.department;
-  
-     res.send(`<script>alert("Assignment submitted successfully!"); window.location="/assignmentSub?department=${department}";</script>`);
+    let success = await userHelper2.addAssignment(req.body, req.file);
+    let department = req.body.department;
+
+    res.send(`<script>alert("Assignment submitted successfully!"); window.location="/assignmentSub?department=${department}";</script>`);
 
   } catch (error) {
     console.error(error);
